@@ -18,16 +18,19 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: gradle
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    # TỰ ĐỘNG VÁ LỖI: Xóa file rỗng lỗi và tự cài đặt bộ chạy Gradle chuẩn của Google
+    - name: Validate and Fix Gradle Wrapper
+      run: |
+        rm -f gradlew
+        gradle wrapper --gradle-version 8.2 --distribution-type bin
+        chmod +x gradlew
 
-    # Thay đổi lệnh để làm sạch và build mới hoàn toàn
+    # Tiến hành làm sạch dự án và biên dịch
     - name: Clean and Build Debug APK
       run: ./gradlew clean assembleDebug
 
-    # Tự động tìm kiếm file .apk trong toàn bộ thư mục build để tránh sai đường dẫn
+    # Quét tất cả các thư mục để tìm file APK sau khi build xong
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
