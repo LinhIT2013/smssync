@@ -10,7 +10,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class SmsReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Telephony.Sms.Intents.SMS_DELIVER_ACTION) {
+        // Thay đổi hành động lắng nghe thụ động tại đây
+        if (intent.action == "android.provider.Telephony.SMS_RECEIVED") {
             val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
             val currentUser = FirebaseAuth.getInstance().currentUser
             
