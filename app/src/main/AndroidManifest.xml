@@ -31,13 +31,15 @@
             </intent-filter>
         </activity>
 
+        <!-- Lắng nghe thụ động, không cần quyền làm ứng dụng mặc định -->
         <receiver android:name=".SmsReceiver"
-            android:permission="android.permission.BROADCAST_SMS"
+            android:permission="android.permission.RECEIVE_SMS"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_DELIVER" />
+            <intent-filter android:priority="999"> <!-- Đặt độ ưu tiên cao để nhận tin sớm -->
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+
 
         <receiver android:name=".MmsReceiver"
             android:permission="android.permission.BROADCAST_WAP_PUSH"
