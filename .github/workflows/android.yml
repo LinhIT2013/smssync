@@ -10,10 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # Cấp phát 4GB RAM cho Gradle và ép giải phóng bộ nhớ hiệu quả hơn
-    env:
-      GRADLE_OPTS: "-Dorg.gradle.jvmargs='-Xmx4096m -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8' -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false"
-
     steps:
     - uses: actions/checkout@v4
 
@@ -22,20 +18,17 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: 'gradle' # Giúp các lần build sau nhanh hơn
 
-    # TỰ ĐỘNG VÁ LỖI: Xóa file rỗng lỗi và tự cài đặt bộ chạy Gradle chuẩn của Google
+    # Tự động sửa lỗi file chạy gradlew bị rỗng
     - name: Validate and Fix Gradle Wrapper
       run: |
         rm -f gradlew
         gradle wrapper --gradle-version 8.2 --distribution-type bin
         chmod +x gradlew
 
-    # Tiến hành biên dịch với giới hạn 2 luồng để không bị tràn RAM lúc đóng gói APK
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug --max-workers=2 --no-daemon
+    - name: Clean and Build Debug APK
+      run: ./gradlew clean assembleDebug
 
-    # Quét tất cả các thư mục để tìm file APK sau khi build xong
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
@@ -43,4 +36,3 @@ jobs:
         path: |
           **/build/outputs/apk/debug/*.apk
           **/build/outputs/apk/*/*.apk
-          
