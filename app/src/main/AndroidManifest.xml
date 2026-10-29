@@ -8,9 +8,11 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:roundIcon="@android:drawable/sym_def_app_icon"
         android:label="LCN SMS Sync"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
 
         <activity android:name=".SettingsActivity"
             android:exported="true">
